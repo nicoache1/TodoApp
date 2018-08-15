@@ -9,8 +9,8 @@ const ItemList = (props) => {
   const {
     item:
     {
-      title, description, selected, toggle, id,
-    },
+      title, description, selected, id,
+    }, onClickAction,
   } = props;
   const {
     container, textTitle, textDescription, text, checkBox, button,
@@ -30,7 +30,7 @@ const ItemList = (props) => {
         <Text style={textDescription}>{description}</Text>
       </View>
       <View style={checkBox}>
-        <Button selected={selected} id={id} onClickAction={toggle}>
+        <Button selected={selected} id={id} onClickAction={onClickAction}>
           {this.renderButton()}
         </Button>
       </View>

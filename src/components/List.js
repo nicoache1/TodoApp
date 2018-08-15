@@ -39,7 +39,7 @@ class List extends React.Component {
           ListHeaderComponent={<Header headerTitle="Todo" />}
           data={this.state.items}
           renderItem={({ item }) =>
-            <ItemList key={item.id} item={item} toggle={this.handleToggle} />}
+            <ItemList key={item.id} item={item} onClickAction={this.handleToggle} />}
           extraData={this.state}
         />
       </View>

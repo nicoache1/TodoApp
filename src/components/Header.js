@@ -1,17 +1,22 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { styles } from './Header.styles';
+import { View, Text, Image } from 'react-native';
+import styles from './Header.styles';
+import addIcon from '../assets/icons/add.png';
 import Button from './Button';
 
 const Header = (props) => {
   const { headerTitle } = props;
-  const { container, title, rightAction } = styles;
+  const {
+    container, titleContainer, title, rightActionContainer, rightAction,
+  } = styles;
   return (
     <View style={container}>
-      <Text style={title}>{headerTitle}</Text>
-      <Button>
-        <Text style={rightAction}>Go to second</Text>
-      </Button>
+      <View style={titleContainer}>
+        <Text style={title}>{headerTitle}</Text>
+      </View>
+      <View style={rightActionContainer}>
+        <Image style={rightAction} source={addIcon} />
+      </View>
     </View>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { styles } from './Button.styles';
+import styles from './Button.styles';
 
 const Button = (props) => {
   const { onClickAction, id, children } = props;
