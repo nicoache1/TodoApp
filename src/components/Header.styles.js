@@ -39,11 +39,6 @@ const styles = StyleSheet.create({
     height: 18,
     marginTop: 32,
     marginBottom: 12,
-    fontWeight: '300',
-    fontStyle: 'normal',
-    letterSpacing: -0.41,
-    textAlign: 'right',
-
   },
 });
 

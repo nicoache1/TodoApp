@@ -5,7 +5,7 @@ import addIcon from '../assets/icons/add.png';
 import Button from './Button';
 
 const Header = (props) => {
-  const { headerTitle } = props;
+  const { headerTitle, onClickAction } = props;
   const {
     container, titleContainer, title, rightActionContainer, rightAction,
   } = styles;
@@ -15,7 +15,9 @@ const Header = (props) => {
         <Text style={title}>{headerTitle}</Text>
       </View>
       <View style={rightActionContainer}>
-        <Image style={rightAction} source={addIcon} />
+        <Button onClickAction={onClickAction}>
+          <Image style={rightAction} source={addIcon} />
+        </Button>
       </View>
     </View>
   );

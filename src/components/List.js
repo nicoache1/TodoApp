@@ -33,10 +33,11 @@ class List extends React.Component {
   }
 
   render() {
+    const { onClickAction } = this.props;
     return (
       <View>
         <FlatList
-          ListHeaderComponent={<Header headerTitle="Todo" />}
+          ListHeaderComponent={<Header headerTitle="Todo" onClickAction={onClickAction} />}
           data={this.state.items}
           renderItem={({ item }) =>
             <ItemList key={item.id} item={item} onClickAction={this.handleToggle} />}
