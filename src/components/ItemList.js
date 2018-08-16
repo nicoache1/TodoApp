@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
-import { styles } from './ItemList.styles';
+import styles from './ItemList.styles';
 import Button from './Button';
 import activeCheckbox from '../assets/icons/iconCheckboxActive.png';
 import inactiveCheckbox from '../assets/icons/iconCheckboxInactive.png';
@@ -9,7 +9,7 @@ const ItemList = (props) => {
   const {
     item:
     {
-      title, description, selected, id,
+      title, description, done, id,
     }, onClickAction,
   } = props;
   const {
@@ -17,7 +17,7 @@ const ItemList = (props) => {
   } = styles;
 
   this.renderButton = () => {
-    if (selected) {
+    if (done) {
       return <Image style={button} source={activeCheckbox} />;
     }
     return <Image style={button} source={inactiveCheckbox} />;
@@ -30,7 +30,7 @@ const ItemList = (props) => {
         <Text style={textDescription}>{description}</Text>
       </View>
       <View style={checkBox}>
-        <Button selected={selected} id={id} onClickAction={onClickAction}>
+        <Button done={done} id={id} onClickAction={onClickAction}>
           {this.renderButton()}
         </Button>
       </View>

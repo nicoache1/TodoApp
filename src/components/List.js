@@ -1,47 +1,55 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Text, Image } from 'react-native';
 import Header from './Header';
 import ItemList from './ItemList';
+import addIcon from '../assets/icons/add.png';
+import Button from './Button';
+import styles from './List.styles';
+import strings from '../assets/strings';
 
 class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [
-        {
-          id: 0, title: 'Titulo 1', description: 'Una descripcion 1', selected: false,
-        },
-        {
-          id: 1, title: 'Titulo 2', description: 'Una descripcion 2', selected: true,
-        },
-        {
-          id: 2, title: 'Titulo 3', description: 'Una descripcion 3', selected: true,
-        },
-        {
-          id: 3, title: 'Titulo 4', description: 'Una descripcion 4', selected: false,
-        },
-      ],
+      items: props.items,
     };
   }
 
-  handleToggle = (event, id) => {
-    this.setState((previousState) => {
-      const newItems = [...previousState.items];
-      newItems[id].selected = !newItems[id].selected;
-      return { ...previousState, items: newItems };
-    });
+  componentWillReceiveProps({ items }) {
+    this.setState({ ...this.state, items });
   }
 
   render() {
-    const { onClickAction } = this.props;
+    const { onClickAction, handleToggle, clearAllDone } = this.props;
+    const {
+      title, titleContainer, rightActionContainer, rightAction, footerContainer, clearButton,
+    } = styles;
+    const { clearAll, titleApp } = strings;
     return (
       <View>
         <FlatList
-          ListHeaderComponent={<Header headerTitle="Todo" onClickAction={onClickAction} />}
+          ListHeaderComponent={
+            <Header>
+              <View style={titleContainer}>
+                <Text style={title}>{titleApp}</Text>
+              </View>
+              <View style={rightActionContainer}>
+                <Button onClickAction={onClickAction}>
+                  <Image style={rightAction} source={addIcon} />
+                </Button>
+              </View>
+            </Header>}
           data={this.state.items}
           renderItem={({ item }) =>
-            <ItemList key={item.id} item={item} onClickAction={this.handleToggle} />}
+            <ItemList key={item.id} item={item} onClickAction={handleToggle} />}
           extraData={this.state}
+          ListFooterComponent={
+            <View style={footerContainer}>
+              <Button onClickAction={clearAllDone}>
+                <Text style={clearButton}>{clearAll}</Text>
+              </Button>
+            </View>
+          }
         />
       </View>
     );

@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../assets/colors';
+import colors from '../assets/colors';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flex: 1,
@@ -43,9 +43,11 @@ export const styles = StyleSheet.create({
     textAlign: 'left',
     color: colors.darkGray,
   },
-  button:{
-    height:24,
-    width:24,
+  button: {
+    height: 24,
+    width: 24,
     borderWidth: 0,
-  }
+  },
 });
+
+export default styles;
