@@ -19,6 +19,10 @@ class AddToDo extends React.Component {
     this.setState({ taskDescription: text });
   }
 
+  onChangeTitle = (text) => {
+    this.setState({ taskTitle: text });
+  }
+
   validateNewTask = () => {
     const { addToDo } = this.props;
     const { emptyTextOrDescription } = strings;

@@ -16,7 +16,9 @@ class List extends React.Component {
   }
 
   componentWillReceiveProps({ items }) {
-    this.setState({ ...this.state, items });
+    this.setState((previousState) => {
+      return { ...previousState, items };
+    });
   }
 
   renderHeader = (navigateAddTodo) => {
