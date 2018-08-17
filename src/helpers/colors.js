@@ -1,13 +1,13 @@
 const colors = {
-  white: '#ffffff',
   black: '#000000',
-  gray: '#edeaea',
-  darkGray: '#959595',
   blue: '#1f86ff',
+  borderGrey: '#f0f0f0',
+  darkGray: '#959595',
+  gray: '#edeaea',
   lightGray: '#dadada',
   pink: '#ff197b',
-  borderGrey: '#f0f0f0',
   red: '#f44242',
   skyGray: '#F5FCFF',
+  white: '#ffffff',
 };
 export default colors;

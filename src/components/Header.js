@@ -1,13 +1,16 @@
 import React from 'react';
 import { View, StatusBar } from 'react-native';
-import colors from '../assets/colors';
+import colors from '../helpers/colors';
 import styles from './Header.styles';
 
 const Header = (props) => {
-  const { container } = styles;
+  const {
+    container,
+  } = styles;
   return (
-
-    <View style={container}>
+    <View
+      style={container}
+    >
       <StatusBar
         backgroundColor={colors.blue}
         barStyle="light-content"

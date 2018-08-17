@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import List from './List';
 import AddToDo from './AddToDo';
 import styles from './App.styles';
+import sampleItems from '../helpers/dataSourceSample';
 
 export default class App extends Component {
   constructor(props) {
@@ -10,20 +11,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       addTask: false,
-      items: [
-        {
-          id: 'Titulo 1Una descripcion 1', title: 'Titulo 1', description: 'Una descripcion 1', done: false,
-        },
-        {
-          id: 'Titulo 2Una descripcion 2', title: 'Titulo 2', description: 'Una descripcion 2', done: true,
-        },
-        {
-          id: 'Titulo 3Una descripcion 3', title: 'Titulo 3', description: 'Una descripcion 3', done: true,
-        },
-        {
-          id: 'Titulo 4Una descripcion 4', title: 'Titulo 4', description: 'Una descripcion 4', done: false,
-        },
-      ],
+      items: sampleItems,
     };
   }
 
@@ -35,11 +23,12 @@ export default class App extends Component {
     this.setState({ addTask: false });
   };
 
-  handleToggle = (event, id) => {
+  handleToggle = (id) => {
     this.setState((previousState) => {
-      const todo = previousState.items.find(element => element.id === id);
+      const newState = { ...previousState };
+      const todo = newState.items.find(element => element.id === id);
       todo.done = !todo.done;
-      return { ...previousState };
+      return { ...newState };
     });
   }
 
@@ -49,7 +38,10 @@ export default class App extends Component {
 
   addToDo = (newTitle, newDescription) => {
     const newToDo = {
-      id: newTitle + newDescription, title: newTitle, description: newDescription, done: false,
+      id: newTitle + newDescription,
+      title: newTitle,
+      description: newDescription,
+      done: false,
     };
     this.setState({ items: [...this.state.items, newToDo] });
     this.navigateToList();
@@ -57,16 +49,29 @@ export default class App extends Component {
 
   renderScreen = () => {
     if (this.state.addTask) {
-      return <AddToDo onClickAction={this.navigateToList} addToDo={this.addToDo} />;
+      return (
+        <AddToDo
+          navigateToList={this.navigateToList}
+          addToDo={this.addToDo}
+        />
+      );
     }
-    return <List items={this.state.items} onClickAction={this.navigateAddTodo} handleToggle={this.handleToggle} clearAllDone={this.clearAllDone} />;
+    return (
+      <List
+        items={this.state.items}
+        navigateAddTodo={this.navigateAddTodo}
+        handleToggle={this.handleToggle}
+        clearAllDone={this.clearAllDone}
+      />
+    );
   };
-
 
   render() {
     const { container } = styles;
     return (
-      <View style={container}>
+      <View
+        style={container}
+      >
         {this.renderScreen()}
       </View>
     );

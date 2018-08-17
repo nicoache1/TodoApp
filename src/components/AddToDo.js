@@ -3,12 +3,20 @@ import { View, Text, TextInput } from 'react-native';
 import Button from './Button';
 import styles from './AddToDo.styles';
 import Header from './Header';
-import strings from '../assets/strings';
+import strings from '../localization/en/strings';
 
 class AddToDo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { taskTitle: '', taskDescription: '', error: '' };
+    this.state = {
+      taskTitle: '',
+      taskDescription: '',
+      error: '',
+    };
+  }
+
+  onChangeDescription = (text) => {
+    this.setState({ taskDescription: text });
   }
 
   validateNewTask = () => {
@@ -22,54 +30,117 @@ class AddToDo extends React.Component {
   }
 
   renderError = () => {
-    const { errorContainer, errorStyle } = styles;
+    const {
+      errorStyle,
+      errorContainer,
+    } = styles;
     if (this.state.error.length !== 0) {
-      return <View style={errorContainer}><Text style={errorStyle}>{this.state.error}</Text></View>;
+      return (
+        <View
+          style={errorContainer}
+        >
+          <Text
+            style={errorStyle}
+          >
+            {this.state.error}
+          </Text>
+        </View>);
     }
     return <View />;
   }
 
-  render() {
-    const { onClickAction } = this.props;
+  renderHeader = (navigateToList) => {
     const {
-      container, title, description, actions, borderBottom, borderText, rightActionContainer, leftActionContainer, centerContainer,
+      actions,
+      rightActionContainer,
+      leftActionContainer,
+      centerContainer,
     } = styles;
-    const { save, cancel, newTask } = strings;
+    const {
+      save,
+      cancel,
+      newTask,
+    } = strings;
+    return (
+      <Header>
+        <View
+          style={actions}
+        >
+          <Button
+            onClickAction={navigateToList}
+          >
+            <Text
+              style={leftActionContainer}
+            >
+              {cancel}
+            </Text>
+          </Button>
+        </View>
+        <View
+          style={actions}
+        >
+          <Text
+            style={centerContainer}
+          >
+            {newTask}
+          </Text>
+        </View>
+        <View
+          style={actions}
+        >
+          <Button
+            onClickAction={this.validateNewTask}
+          >
+            <Text
+              style={rightActionContainer}
+            >
+              {save}
+            </Text>
+          </Button>
+        </View>
+      </Header>
+    );
+  }
+
+  render() {
+    const {
+      navigateToList,
+    } = this.props;
+    const {
+      container,
+      title,
+      description,
+      borderBottom,
+      borderText,
+    } = styles;
+
     return (
       <Fragment>
-        <Header>
-          <View style={actions}>
-            <Button onClickAction={onClickAction}>
-              <Text style={leftActionContainer}> {cancel} </Text>
-            </Button>
-          </View>
-          <View style={actions}>
-            <Text style={centerContainer}>{newTask} </Text>
-          </View>
-          <View style={actions}>
-            <Button onClickAction={() => this.validateNewTask()}>
-              <Text style={rightActionContainer}> {save} </Text>
-            </Button>
-          </View>
-        </Header>
-        <View style={container}>
+        {this.renderHeader(navigateToList)}
+        <View
+          style={container}
+        >
           <TextInput
             style={title}
             placeholder="Task title"
             value={this.state.taskTitle}
             onChangeText={(text) => { this.setState({ taskTitle: text }); }}
           />
-          <View style={borderText} />
+          <View
+            style={borderText}
+          />
           <TextInput
             style={description}
             placeholder="Task description"
-            multiline={true}
+            multiline
             numberOfLines={4}
             value={this.state.taskDescription}
-            onChangeText={(text) => { this.setState({ taskDescription: text }); }}
+            onChangeText={this.onChangeDescription}
           />
         </View>
-        <View style={borderBottom} />
+        <View
+          style={borderBottom}
+        />
         {this.renderError()}
       </Fragment>
     );

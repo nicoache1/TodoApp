@@ -3,11 +3,22 @@ import { View, TouchableOpacity } from 'react-native';
 import styles from './Button.styles';
 
 const Button = (props) => {
-  const { onClickAction, id, children } = props;
-  const { container } = styles;
+  const {
+    onClickAction,
+    id,
+    children,
+  } = props;
+  const {
+    container,
+  } = styles;
+
   return (
-    <View style={container}>
-      <TouchableOpacity onPress={(e) => { onClickAction(e, id); }}>
+    <View
+      style={container}
+    >
+      <TouchableOpacity
+        onPress={() => onClickAction(id)}
+      >
         {children}
       </TouchableOpacity>
     </View>

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import colors from '../assets/colors';
+import colors from '../helpers/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     borderBottomWidth: 1,
-    borderBottomColor: '#edeaea',
+    borderBottomColor: colors.gray,
   },
   checkBox: {
     flexDirection: 'column',
@@ -27,8 +27,6 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: 16,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
     lineHeight: 24,
     letterSpacing: 0,
     textAlign: 'left',
@@ -36,8 +34,6 @@ const styles = StyleSheet.create({
   },
   textDescription: {
     fontSize: 14,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
     lineHeight: 20,
     letterSpacing: 0,
     textAlign: 'left',

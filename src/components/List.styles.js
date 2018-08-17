@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import colors from '../assets/colors';
+import colors from '../helpers/colors';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginBottom: 12,
     fontWeight: 'bold',
-    fontStyle: 'normal',
     letterSpacing: -0.41,
     textAlign: 'center',
     color: colors.white,
@@ -40,7 +39,6 @@ const styles = StyleSheet.create({
     height: 32,
     fontSize: 14,
     fontWeight: '600',
-    fontStyle: 'normal',
     lineHeight: 32,
     letterSpacing: 0,
     textAlign: 'center',

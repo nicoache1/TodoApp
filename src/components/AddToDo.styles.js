@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import colors from '../assets/colors';
+import colors from '../helpers/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     fontSize: 17,
     fontWeight: '300',
-    fontStyle: 'normal',
     letterSpacing: -0.41,
     textAlign: 'right',
     color: colors.white,
@@ -29,7 +28,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     fontSize: 17,
     fontWeight: '300',
-    fontStyle: 'normal',
     letterSpacing: -0.41,
     textAlign: 'left',
     color: colors.white,
@@ -37,7 +35,6 @@ const styles = StyleSheet.create({
   centerContainer: {
     fontSize: 17,
     fontWeight: 'bold',
-    fontStyle: 'normal',
     letterSpacing: -0.41,
     textAlign: 'center',
     color: colors.white,
@@ -46,8 +43,6 @@ const styles = StyleSheet.create({
     width: 343,
     height: 50,
     fontSize: 36,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
     lineHeight: 54,
     letterSpacing: 0,
     textAlign: 'left',
@@ -69,8 +64,6 @@ const styles = StyleSheet.create({
     width: 335,
     height: 96,
     fontSize: 14,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
     lineHeight: 20,
     letterSpacing: 0,
     textAlign: 'left',
@@ -87,8 +80,6 @@ const styles = StyleSheet.create({
   errorStyle: {
     color: colors.red,
     fontSize: 14,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
     lineHeight: 20,
   },
 });

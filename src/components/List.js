@@ -5,7 +5,7 @@ import ItemList from './ItemList';
 import addIcon from '../assets/icons/add.png';
 import Button from './Button';
 import styles from './List.styles';
-import strings from '../assets/strings';
+import strings from '../localization/en/strings';
 
 class List extends React.Component {
   constructor(props) {
@@ -19,36 +19,93 @@ class List extends React.Component {
     this.setState({ ...this.state, items });
   }
 
-  render() {
-    const { onClickAction, handleToggle, clearAllDone } = this.props;
+  renderHeader = (navigateAddTodo) => {
     const {
-      title, titleContainer, rightActionContainer, rightAction, footerContainer, clearButton,
+      title,
+      titleContainer,
+      rightActionContainer,
+      rightAction,
     } = styles;
-    const { clearAll, titleApp } = strings;
+    const {
+      titleApp,
+    } = strings;
+    return (
+      <Header>
+        <View
+          style={titleContainer}
+        >
+          <Text
+            style={title}
+          >
+            {titleApp}
+          </Text>
+        </View>
+        <View
+          style={rightActionContainer}
+        >
+          <Button
+            onClickAction={navigateAddTodo}
+          >
+            <Image
+              style={rightAction}
+              source={addIcon}
+            />
+          </Button>
+        </View>
+      </Header>
+    );
+  }
+
+  renderFooter = (clearAllDone) => {
+    const {
+      footerContainer,
+      clearButton,
+    } = styles;
+    const {
+      clearAll,
+    } = strings;
+    return (
+      <View
+        style={footerContainer}
+      >
+        <Button
+          onClickAction={clearAllDone}
+        >
+          <Text
+            style={clearButton}
+          >
+            {clearAll}
+          </Text>
+        </Button>
+      </View>
+    );
+  }
+
+  render() {
+    const {
+      navigateAddTodo,
+      handleToggle,
+      clearAllDone,
+    } = this.props;
     return (
       <View>
         <FlatList
           ListHeaderComponent={
-            <Header>
-              <View style={titleContainer}>
-                <Text style={title}>{titleApp}</Text>
-              </View>
-              <View style={rightActionContainer}>
-                <Button onClickAction={onClickAction}>
-                  <Image style={rightAction} source={addIcon} />
-                </Button>
-              </View>
-            </Header>}
+            this.renderHeader(navigateAddTodo)
+          }
           data={this.state.items}
-          renderItem={({ item }) =>
-            <ItemList key={item.id} item={item} onClickAction={handleToggle} />}
+          renderItem={
+            ({ item }) => (
+              <ItemList
+                key={item.id}
+                item={item}
+                handleToggle={handleToggle}
+              />
+            )
+          }
           extraData={this.state}
           ListFooterComponent={
-            <View style={footerContainer}>
-              <Button onClickAction={clearAllDone}>
-                <Text style={clearButton}>{clearAll}</Text>
-              </Button>
-            </View>
+            this.renderFooter(clearAllDone)
           }
         />
       </View>
