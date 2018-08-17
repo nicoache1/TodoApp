@@ -6,56 +6,44 @@ import addIcon from '../assets/icons/add.png';
 import Button from './Button';
 import styles from './List.styles';
 import strings from '../localization/en/strings';
+import colors from '../helpers/colors';
+import sampleItems from '../helpers/dataSourceSample';
 
 class List extends React.Component {
+  static navigatorStyle = {
+    navBarBackgroundColor: colors.blue,
+    navBarTextColor: colors.white,
+  };
+
+  static navigatorButtons = {
+    rightButtons: [
+      {
+        id: 'goToDo',
+        icon: addIcon,
+      },
+    ],
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      items: props.items,
+      items: sampleItems,
     };
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
-  componentWillReceiveProps({ items }) {
-    this.setState((previousState) => {
-      return { ...previousState, items };
-    });
-  }
-
-  renderHeader = (navigateAddTodo) => {
-    const {
-      title,
-      titleContainer,
-      rightActionContainer,
-      rightAction,
-    } = styles;
-    const {
-      titleApp,
-    } = strings;
-    return (
-      <Header>
-        <View
-          style={titleContainer}
-        >
-          <Text
-            style={title}
-          >
-            {titleApp}
-          </Text>
-        </View>
-        <View
-          style={rightActionContainer}
-        >
-          <Button
-            onClickAction={navigateAddTodo}
-          >
-            <Image
-              style={rightAction}
-              source={addIcon}
-            />
-          </Button>
-        </View>
-      </Header>
-    );
+  onNavigatorEvent(event) {
+    const { navigator } = this.props;
+    if (event.type === 'NavBarButtonPress') {
+      if (event.id === 'goToDo') {
+        navigator.push({
+          screen: 'ADD_TODO_SCREEN',
+          animated: true,
+          animationType: 'fade',
+          title: 'Todo',
+        });
+      }
+    }
   }
 
   renderFooter = (clearAllDone) => {
@@ -85,16 +73,12 @@ class List extends React.Component {
 
   render() {
     const {
-      navigateAddTodo,
       handleToggle,
       clearAllDone,
     } = this.props;
     return (
       <View>
         <FlatList
-          ListHeaderComponent={
-            this.renderHeader(navigateAddTodo)
-          }
           data={this.state.items}
           renderItem={
             ({ item }) => (
