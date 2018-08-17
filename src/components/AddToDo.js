@@ -19,7 +19,7 @@ class AddToDo extends React.Component {
     this.setState({ taskDescription: text });
   }
 
-  onChangeTitle = (text) => {
+  onChangeText = (text) => {
     this.setState({ taskTitle: text });
   }
 
@@ -128,7 +128,7 @@ class AddToDo extends React.Component {
             style={title}
             placeholder="Task title"
             value={this.state.taskTitle}
-            onChangeText={(text) => { this.setState({ taskTitle: text }); }}
+            onChangeText={this.onChangeText}
           />
           <View
             style={borderText}
