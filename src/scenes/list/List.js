@@ -7,7 +7,7 @@ import Button from '../../common/Button';
 import styles from './List.styles';
 import strings from '../../localization/en/strings';
 import colors from '../../helpers/colors';
-import scenes from '../../helpers/scenes';
+import scenes from '../../helpers/screens';
 import mobxStore from '../app/stores';
 
 @observer
@@ -77,11 +77,6 @@ class List extends React.Component {
   }
 
   render() {
-    const {
-      navigateAddTodo,
-      handleToggle,
-      clearAllDone,
-    } = this.props;
     return (
       <View>
         <FlatList
@@ -96,7 +91,7 @@ class List extends React.Component {
             )
           }
           ListFooterComponent={
-            this.renderFooter(clearAllDone)
+            this.renderFooter(mobxStore.clearAllDone)
           }
         />
       </View>
