@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, FlatList, Text } from 'react-native';
-import ItemList from './ItemList';
-import addIcon from '../assets/icons/add.png';
-import Button from './Button';
+import { observer } from 'mobx-react/native';
+import ItemList from './itemList/ItemList';
+import addIcon from '../../assets/icons/add.png';
+import Button from '../../common/Button';
 import styles from './List.styles';
-import strings from '../localization/en/strings';
-import colors from '../helpers/colors';
-import sampleItems from '../helpers/dataSourceSample';
-import scenes from '../helpers/scenes';
+import strings from '../../localization/en/strings';
+import colors from '../../helpers/colors';
+import scenes from '../../helpers/scenes';
+import mobxStore from '../app/stores';
 
+@observer
 class List extends React.Component {
   static navigatorStyle = {
     navBarBackgroundColor: colors.blue,
@@ -23,7 +25,6 @@ class List extends React.Component {
         id: 'goToDo',
         icon: addIcon,
         buttonColor: colors.white,
-        disableIconTint: true,
         buttonFontSize: 10,
       },
     ],
@@ -31,13 +32,10 @@ class List extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      items: sampleItems,
-    };
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
   }
 
-  onNavigatorEvent(event) {
+  onNavigatorEvent = (event) => {
     const { navigator } = this.props;
     if (event.type === 'NavBarButtonPress') {
       if (event.id === 'goToDo') {
@@ -53,33 +51,6 @@ class List extends React.Component {
     }
   }
 
-  clearAllDone = () => {
-    this.setState((previousState) => {
-      return { items: previousState.items.filter(element => element.done === false) };
-    });
-  }
-
-  addToDo = (newTitle, newDescription) => {
-    const newToDo = {
-      id: `${newTitle}${newDescription}`,
-      title: newTitle,
-      description: newDescription,
-      done: false,
-    };
-    this.setState((previousState) => {
-      return { items: [...previousState.items, newToDo] };
-    });
-  }
-
-  handleToggle = (id) => {
-    this.setState((previousState) => {
-      const newState = { ...previousState };
-      const todo = newState.items.find(element => element.id === id);
-      todo.done = !todo.done;
-      return { ...newState };
-    });
-  }
-
   renderFooter = () => {
     const {
       footerContainer,
@@ -93,7 +64,7 @@ class List extends React.Component {
         style={footerContainer}
       >
         <Button
-          onClickAction={this.clearAllDone}
+          onClickAction={mobxStore.clearAllDone}
         >
           <Text
             style={clearButton}
@@ -106,22 +77,26 @@ class List extends React.Component {
   }
 
   render() {
+    const {
+      navigateAddTodo,
+      handleToggle,
+      clearAllDone,
+    } = this.props;
     return (
       <View>
         <FlatList
-          data={this.state.items}
+          data={mobxStore.items.slice()}
+          keyExtractor={item => item.id}
           renderItem={
             ({ item }) => (
               <ItemList
-                key={item.id}
                 item={item}
-                handleToggle={this.handleToggle}
+                handleToggle={mobxStore.handleToggle}
               />
             )
           }
-          extraData={this.state}
           ListFooterComponent={
-            this.renderFooter()
+            this.renderFooter(clearAllDone)
           }
         />
       </View>

@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
+import { observer } from 'mobx-react/native';
 import { View, Text, TextInput } from 'react-native';
 import styles from './AddToDo.styles';
-import strings from '../localization/en/strings';
-import colors from '../helpers/colors';
+import colors from '../../helpers/colors';
+import mobxStore from '../app/stores';
 
+@observer
 class AddToDo extends React.Component {
   static navigatorStyle = {
     navBarBackgroundColor: colors.blue,
@@ -24,7 +26,6 @@ class AddToDo extends React.Component {
     ],
     leftButtons: [
       {
-        disableIconTint: true,
         buttonColor: colors.white,
       },
     ],
@@ -35,22 +36,24 @@ class AddToDo extends React.Component {
     this.state = {
       taskTitle: '',
       taskDescription: '',
-      error: '',
     };
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
   }
 
-  onNavigatorEvent(event) {
+  onNavigatorEvent = (event) => {
     const { navigator } = this.props;
     if (
-      event.type === 'NavBarButtonPress' &&
-      event.id === 'saveToDo' &&
-      this.validateNewTask()
+      event.type === 'NavBarButtonPress'
     ) {
-      navigator.pop({
-        animated: true,
-        animationType: 'fade',
-      });
+      if (event.id === 'saveToDo') {
+        const result = mobxStore.addToDo(this.state.taskTitle, this.state.taskDescription);
+        if (result) {
+          navigator.pop({
+            animated: true,
+            animationType: 'fade',
+          });
+        }
+      }
     }
   }
 
@@ -62,26 +65,12 @@ class AddToDo extends React.Component {
     this.setState({ taskTitle: text });
   }
 
-  validateNewTask = () => {
-    const { addToDo } = this.props;
-    const { emptyTextOrDescription } = strings;
-    let result;
-    if (this.state.taskTitle.length !== 0 && this.state.taskDescription.length !== 0) {
-      addToDo(this.state.taskTitle, this.state.taskDescription);
-      result = true;
-    } else {
-      this.setState({ error: emptyTextOrDescription });
-      result = false;
-    }
-    return result;
-  }
-
   renderError = () => {
     const {
       errorStyle,
       errorContainer,
     } = styles;
-    if (this.state.error.length !== 0) {
+    if (mobxStore.error.length !== 0) {
       return (
         <View
           style={errorContainer}
@@ -89,7 +78,7 @@ class AddToDo extends React.Component {
           <Text
             style={errorStyle}
           >
-            {this.state.error}
+            {mobxStore.error}
           </Text>
         </View>);
     }

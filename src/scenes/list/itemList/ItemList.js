@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import styles from './ItemList.styles';
-import Button from './Button';
-import activeCheckbox from '../assets/icons/iconCheckboxActive.png';
-import inactiveCheckbox from '../assets/icons/iconCheckboxInactive.png';
+import Button from '../../../common/Button';
+import activeCheckbox from '../../../assets/icons/iconCheckboxActive.png';
+import inactiveCheckbox from '../../../assets/icons/iconCheckboxInactive.png';
 
 this.renderButton = (done, button) => {
   if (done) {
