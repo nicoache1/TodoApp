@@ -54,17 +54,21 @@ class List extends React.Component {
   }
 
   clearAllDone = () => {
-    this.setState({ items: this.state.items.filter(element => element.done === false) });
+    this.setState((previousState) => {
+      return { items: previousState.items.filter(element => element.done === false) };
+    });
   }
 
   addToDo = (newTitle, newDescription) => {
     const newToDo = {
-      id: newTitle + newDescription,
+      id: `${newTitle}${newDescription}`,
       title: newTitle,
       description: newDescription,
       done: false,
     };
-    this.setState({ items: [...this.state.items, newToDo] });
+    this.setState((previousState) => {
+      return { items: [...previousState.items, newToDo] };
+    });
   }
 
   handleToggle = (id) => {

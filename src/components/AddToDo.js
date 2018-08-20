@@ -42,15 +42,15 @@ class AddToDo extends React.Component {
 
   onNavigatorEvent(event) {
     const { navigator } = this.props;
-    if (event.type === 'NavBarButtonPress') {
-      if (event.id === 'saveToDo') {
-        if (this.validateNewTask()) {
-          navigator.pop({
-            animated: true,
-            animationType: 'fade',
-          });
-        }
-      }
+    if (
+      event.type === 'NavBarButtonPress' &&
+      event.id === 'saveToDo' &&
+      this.validateNewTask()
+    ) {
+      navigator.pop({
+        animated: true,
+        animationType: 'fade',
+      });
     }
   }
 
@@ -60,10 +60,6 @@ class AddToDo extends React.Component {
 
   onChangeText = (text) => {
     this.setState({ taskTitle: text });
-  }
-
-  clearAllDone = () => {
-    this.setState({ items: this.state.items.filter(element => element.done === false) });
   }
 
   validateNewTask = () => {
