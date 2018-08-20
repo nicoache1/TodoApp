@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, FlatList, Text, Image } from 'react-native';
-import Header from './Header';
+import { View, FlatList, Text } from 'react-native';
 import ItemList from './ItemList';
 import addIcon from '../assets/icons/add.png';
 import Button from './Button';
@@ -8,11 +7,14 @@ import styles from './List.styles';
 import strings from '../localization/en/strings';
 import colors from '../helpers/colors';
 import sampleItems from '../helpers/dataSourceSample';
+import scenes from '../helpers/scenes';
 
 class List extends React.Component {
   static navigatorStyle = {
     navBarBackgroundColor: colors.blue,
     navBarTextColor: colors.white,
+    navBarButtonColor: colors.white,
+    statusBarTextColorScheme: 'light',
   };
 
   static navigatorButtons = {
@@ -20,6 +22,9 @@ class List extends React.Component {
       {
         id: 'goToDo',
         icon: addIcon,
+        buttonColor: colors.white,
+        disableIconTint: true,
+        buttonFontSize: 10,
       },
     ],
   }
@@ -37,16 +42,41 @@ class List extends React.Component {
     if (event.type === 'NavBarButtonPress') {
       if (event.id === 'goToDo') {
         navigator.push({
-          screen: 'ADD_TODO_SCREEN',
+          screen: scenes.ADD_TODO_SCREEN,
           animated: true,
           animationType: 'fade',
           title: 'Todo',
+          passProps: { addToDo: this.addToDo },
+          backButtonTitle: 'Cancel',
         });
       }
     }
   }
 
-  renderFooter = (clearAllDone) => {
+  clearAllDone = () => {
+    this.setState({ items: this.state.items.filter(element => element.done === false) });
+  }
+
+  addToDo = (newTitle, newDescription) => {
+    const newToDo = {
+      id: newTitle + newDescription,
+      title: newTitle,
+      description: newDescription,
+      done: false,
+    };
+    this.setState({ items: [...this.state.items, newToDo] });
+  }
+
+  handleToggle = (id) => {
+    this.setState((previousState) => {
+      const newState = { ...previousState };
+      const todo = newState.items.find(element => element.id === id);
+      todo.done = !todo.done;
+      return { ...newState };
+    });
+  }
+
+  renderFooter = () => {
     const {
       footerContainer,
       clearButton,
@@ -59,7 +89,7 @@ class List extends React.Component {
         style={footerContainer}
       >
         <Button
-          onClickAction={clearAllDone}
+          onClickAction={this.clearAllDone}
         >
           <Text
             style={clearButton}
@@ -72,10 +102,6 @@ class List extends React.Component {
   }
 
   render() {
-    const {
-      handleToggle,
-      clearAllDone,
-    } = this.props;
     return (
       <View>
         <FlatList
@@ -85,13 +111,13 @@ class List extends React.Component {
               <ItemList
                 key={item.id}
                 item={item}
-                handleToggle={handleToggle}
+                handleToggle={this.handleToggle}
               />
             )
           }
           extraData={this.state}
           ListFooterComponent={
-            this.renderFooter(clearAllDone)
+            this.renderFooter()
           }
         />
       </View>

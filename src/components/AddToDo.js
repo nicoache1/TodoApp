@@ -8,6 +8,8 @@ class AddToDo extends React.Component {
   static navigatorStyle = {
     navBarBackgroundColor: colors.blue,
     navBarTextColor: colors.white,
+    navBarButtonColor: colors.white,
+    statusBarTextColorScheme: 'light',
   };
 
   static navigatorButtons = {
@@ -18,6 +20,12 @@ class AddToDo extends React.Component {
         buttonColor: colors.white,
         buttonFontSize: 14,
         buttonFontWeight: '400',
+      },
+    ],
+    leftButtons: [
+      {
+        disableIconTint: true,
+        buttonColor: colors.white,
       },
     ],
   }
@@ -36,12 +44,12 @@ class AddToDo extends React.Component {
     const { navigator } = this.props;
     if (event.type === 'NavBarButtonPress') {
       if (event.id === 'saveToDo') {
-        this.validateNewTask();
-        navigator.push({
-          screen: 'TODO_LIST_SCREEN',
-          animated: true,
-          animationType: 'fade',
-        });
+        if (this.validateNewTask()) {
+          navigator.pop({
+            animated: true,
+            animationType: 'fade',
+          });
+        }
       }
     }
   }
@@ -54,14 +62,22 @@ class AddToDo extends React.Component {
     this.setState({ taskTitle: text });
   }
 
+  clearAllDone = () => {
+    this.setState({ items: this.state.items.filter(element => element.done === false) });
+  }
+
   validateNewTask = () => {
     const { addToDo } = this.props;
     const { emptyTextOrDescription } = strings;
+    let result;
     if (this.state.taskTitle.length !== 0 && this.state.taskDescription.length !== 0) {
       addToDo(this.state.taskTitle, this.state.taskDescription);
+      result = true;
     } else {
       this.setState({ error: emptyTextOrDescription });
+      result = false;
     }
+    return result;
   }
 
   renderError = () => {
@@ -92,7 +108,6 @@ class AddToDo extends React.Component {
       borderBottom,
       borderText,
     } = styles;
-
     return (
       <Fragment>
         <View
