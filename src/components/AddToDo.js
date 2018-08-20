@@ -1,11 +1,35 @@
 import React, { Fragment } from 'react';
 import { View, Text, TextInput } from 'react-native';
-import Button from './Button';
 import styles from './AddToDo.styles';
-import Header from './Header';
 import strings from '../localization/en/strings';
+import colors from '../helpers/colors';
 
 class AddToDo extends React.Component {
+  static navigatorStyle = {
+    navBarBackgroundColor: colors.blue,
+    navBarTextColor: colors.white,
+    navBarButtonColor: colors.white,
+    statusBarTextColorScheme: 'light',
+  };
+
+  static navigatorButtons = {
+    rightButtons: [
+      {
+        title: 'Save',
+        id: 'saveToDo',
+        buttonColor: colors.white,
+        buttonFontSize: 14,
+        buttonFontWeight: '400',
+      },
+    ],
+    leftButtons: [
+      {
+        disableIconTint: true,
+        buttonColor: colors.white,
+      },
+    ],
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -13,6 +37,21 @@ class AddToDo extends React.Component {
       taskDescription: '',
       error: '',
     };
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  onNavigatorEvent(event) {
+    const { navigator } = this.props;
+    if (
+      event.type === 'NavBarButtonPress' &&
+      event.id === 'saveToDo' &&
+      this.validateNewTask()
+    ) {
+      navigator.pop({
+        animated: true,
+        animationType: 'fade',
+      });
+    }
   }
 
   onChangeDescription = (text) => {
@@ -26,11 +65,15 @@ class AddToDo extends React.Component {
   validateNewTask = () => {
     const { addToDo } = this.props;
     const { emptyTextOrDescription } = strings;
+    let result;
     if (this.state.taskTitle.length !== 0 && this.state.taskDescription.length !== 0) {
       addToDo(this.state.taskTitle, this.state.taskDescription);
+      result = true;
     } else {
       this.setState({ error: emptyTextOrDescription });
+      result = false;
     }
+    return result;
   }
 
   renderError = () => {
@@ -53,63 +96,7 @@ class AddToDo extends React.Component {
     return <View />;
   }
 
-  renderHeader = (navigateToList) => {
-    const {
-      actions,
-      rightActionContainer,
-      leftActionContainer,
-      centerContainer,
-    } = styles;
-    const {
-      save,
-      cancel,
-      newTask,
-    } = strings;
-    return (
-      <Header>
-        <View
-          style={actions}
-        >
-          <Button
-            onClickAction={navigateToList}
-          >
-            <Text
-              style={leftActionContainer}
-            >
-              {cancel}
-            </Text>
-          </Button>
-        </View>
-        <View
-          style={actions}
-        >
-          <Text
-            style={centerContainer}
-          >
-            {newTask}
-          </Text>
-        </View>
-        <View
-          style={actions}
-        >
-          <Button
-            onClickAction={this.validateNewTask}
-          >
-            <Text
-              style={rightActionContainer}
-            >
-              {save}
-            </Text>
-          </Button>
-        </View>
-      </Header>
-    );
-  }
-
   render() {
-    const {
-      navigateToList,
-    } = this.props;
     const {
       container,
       title,
@@ -117,10 +104,8 @@ class AddToDo extends React.Component {
       borderBottom,
       borderText,
     } = styles;
-
     return (
       <Fragment>
-        {this.renderHeader(navigateToList)}
         <View
           style={container}
         >

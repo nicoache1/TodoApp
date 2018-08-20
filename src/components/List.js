@@ -1,64 +1,86 @@
 import React from 'react';
-import { View, FlatList, Text, Image } from 'react-native';
-import Header from './Header';
+import { View, FlatList, Text } from 'react-native';
 import ItemList from './ItemList';
 import addIcon from '../assets/icons/add.png';
 import Button from './Button';
 import styles from './List.styles';
 import strings from '../localization/en/strings';
+import colors from '../helpers/colors';
+import sampleItems from '../helpers/dataSourceSample';
+import scenes from '../helpers/scenes';
 
 class List extends React.Component {
+  static navigatorStyle = {
+    navBarBackgroundColor: colors.blue,
+    navBarTextColor: colors.white,
+    navBarButtonColor: colors.white,
+    statusBarTextColorScheme: 'light',
+  };
+
+  static navigatorButtons = {
+    rightButtons: [
+      {
+        id: 'goToDo',
+        icon: addIcon,
+        buttonColor: colors.white,
+        disableIconTint: true,
+        buttonFontSize: 10,
+      },
+    ],
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      items: props.items,
+      items: sampleItems,
     };
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
   }
 
-  componentWillReceiveProps({ items }) {
+  onNavigatorEvent(event) {
+    const { navigator } = this.props;
+    if (event.type === 'NavBarButtonPress') {
+      if (event.id === 'goToDo') {
+        navigator.push({
+          screen: scenes.ADD_TODO_SCREEN,
+          animated: true,
+          animationType: 'fade',
+          title: 'Todo',
+          passProps: { addToDo: this.addToDo },
+          backButtonTitle: 'Cancel',
+        });
+      }
+    }
+  }
+
+  clearAllDone = () => {
     this.setState((previousState) => {
-      return { ...previousState, items };
+      return { items: previousState.items.filter(element => element.done === false) };
     });
   }
 
-  renderHeader = (navigateAddTodo) => {
-    const {
-      title,
-      titleContainer,
-      rightActionContainer,
-      rightAction,
-    } = styles;
-    const {
-      titleApp,
-    } = strings;
-    return (
-      <Header>
-        <View
-          style={titleContainer}
-        >
-          <Text
-            style={title}
-          >
-            {titleApp}
-          </Text>
-        </View>
-        <View
-          style={rightActionContainer}
-        >
-          <Button
-            onClickAction={navigateAddTodo}
-          >
-            <Image
-              style={rightAction}
-              source={addIcon}
-            />
-          </Button>
-        </View>
-      </Header>
-    );
+  addToDo = (newTitle, newDescription) => {
+    const newToDo = {
+      id: `${newTitle}${newDescription}`,
+      title: newTitle,
+      description: newDescription,
+      done: false,
+    };
+    this.setState((previousState) => {
+      return { items: [...previousState.items, newToDo] };
+    });
   }
 
-  renderFooter = (clearAllDone) => {
+  handleToggle = (id) => {
+    this.setState((previousState) => {
+      const newState = { ...previousState };
+      const todo = newState.items.find(element => element.id === id);
+      todo.done = !todo.done;
+      return { ...newState };
+    });
+  }
+
+  renderFooter = () => {
     const {
       footerContainer,
       clearButton,
@@ -71,7 +93,7 @@ class List extends React.Component {
         style={footerContainer}
       >
         <Button
-          onClickAction={clearAllDone}
+          onClickAction={this.clearAllDone}
         >
           <Text
             style={clearButton}
@@ -84,30 +106,22 @@ class List extends React.Component {
   }
 
   render() {
-    const {
-      navigateAddTodo,
-      handleToggle,
-      clearAllDone,
-    } = this.props;
     return (
       <View>
         <FlatList
-          ListHeaderComponent={
-            this.renderHeader(navigateAddTodo)
-          }
           data={this.state.items}
           renderItem={
             ({ item }) => (
               <ItemList
                 key={item.id}
                 item={item}
-                handleToggle={handleToggle}
+                handleToggle={this.handleToggle}
               />
             )
           }
           extraData={this.state}
           ListFooterComponent={
-            this.renderFooter(clearAllDone)
+            this.renderFooter()
           }
         />
       </View>
