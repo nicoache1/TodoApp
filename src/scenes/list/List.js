@@ -9,6 +9,7 @@ import strings from '../../localization/en/strings';
 import colors from '../../helpers/colors';
 import scenes from '../../helpers/screens';
 import toDoStore from '../app/stores';
+import toDoController from '../../networking/controllers/ToDoController';
 
 @observer
 class List extends React.Component {
@@ -33,6 +34,10 @@ class List extends React.Component {
   constructor(props) {
     super(props);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+  }
+
+  componentDidMount() {
+    toDoController.getToDo();
   }
 
   onNavigatorEvent = (event) => {

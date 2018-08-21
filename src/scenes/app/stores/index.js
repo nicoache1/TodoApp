@@ -1,9 +1,8 @@
 import { observable, action } from 'mobx';
-import sampleData from '../../../helpers/dataSourceSample';
 import strings from '../../../localization/en/strings';
 
 class ObservableTodoStore {
-  @observable items = sampleData;
+  @observable items = [];
   @observable error = '';
 
   @action
@@ -18,8 +17,7 @@ class ObservableTodoStore {
       const newToDo = {
         id: `${newTitle}${newDescription}`,
         title: newTitle,
-        description: newDescription,
-        done: false,
+        completed: false,
       };
       this.items.push(newToDo);
       this.error = '';
@@ -30,9 +28,26 @@ class ObservableTodoStore {
   }
 
   @action
+  addItems = (newItems) => {
+    this.items = newItems;
+  }
+
+  @action
   handleToggle = (id) => {
-    const todo = this.items.find(element => element.id === id);
-    todo.done = !todo.done;
+    const toDo = this.items.find(element => element.id === id);
+    toDo.completed = !toDo.completed;
+  }
+
+  @action
+  removeToDo = (toDo) => {
+    const index = this.items.find(toDo);
+    this.items.splice(index, 1);
+  }
+
+  @action
+  updateToDo = (toDo) => {
+    this.removeToDo(toDo);
+    this.addToDo(toDo);
   }
 }
 
