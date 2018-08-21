@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
+import { observer } from 'mobx-react';
 import styles from './ItemList.styles';
-import Button from './Button';
-import activeCheckbox from '../assets/icons/iconCheckboxActive.png';
-import inactiveCheckbox from '../assets/icons/iconCheckboxInactive.png';
+import Button from '../../../common/Button';
+import activeCheckbox from '../../../assets/icons/iconCheckboxActive.png';
+import inactiveCheckbox from '../../../assets/icons/iconCheckboxInactive.png';
 
 this.renderButton = (done, button) => {
   if (done) {
@@ -22,7 +23,7 @@ this.renderButton = (done, button) => {
   );
 };
 
-const ItemList = (props) => {
+const ItemList = observer((props) => {
   const {
     item:
     {
@@ -73,6 +74,6 @@ const ItemList = (props) => {
       </View>
     </View>
   );
-};
+});
 
 export default ItemList;

@@ -1,7 +1,9 @@
 import { Navigation } from 'react-native-navigation';
-import registerScreens from '../scenes';
-import scenes from '../helpers/scenes';
+import { useStrict } from 'mobx';
+import registerScreens from './screens';
+import scenes from '../../helpers/screens';
 
+useStrict(true);
 registerScreens();
 
 Navigation.startSingleScreenApp({
