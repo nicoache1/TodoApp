@@ -3,7 +3,7 @@ import { observer } from 'mobx-react/native';
 import { View, Text, TextInput } from 'react-native';
 import styles from './AddToDo.styles';
 import colors from '../../helpers/colors';
-import mobxStore from '../app/stores';
+import toDoStore from '../app/stores';
 
 @observer
 class AddToDo extends React.Component {
@@ -46,7 +46,7 @@ class AddToDo extends React.Component {
       event.type === 'NavBarButtonPress'
     ) {
       if (event.id === 'saveToDo') {
-        const result = mobxStore.addToDo(this.state.taskTitle, this.state.taskDescription);
+        const result = toDoStore.addToDo(this.state.taskTitle, this.state.taskDescription);
         if (result) {
           navigator.pop({
             animated: true,
@@ -70,7 +70,7 @@ class AddToDo extends React.Component {
       errorStyle,
       errorContainer,
     } = styles;
-    if (mobxStore.error.length !== 0) {
+    if (toDoStore.error.length !== 0) {
       return (
         <View
           style={errorContainer}
@@ -78,7 +78,7 @@ class AddToDo extends React.Component {
           <Text
             style={errorStyle}
           >
-            {mobxStore.error}
+            {toDoStore.error}
           </Text>
         </View>);
     }

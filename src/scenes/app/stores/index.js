@@ -31,10 +31,8 @@ class ObservableTodoStore {
 
   @action
   handleToggle = (id) => {
-    const newState = [...this.items];
-    const todo = newState.find(element => element.id === id);
+    const todo = this.items.find(element => element.id === id);
     todo.done = !todo.done;
-    this.items = newState;
   }
 }
 

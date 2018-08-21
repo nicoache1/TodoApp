@@ -8,7 +8,7 @@ import styles from './List.styles';
 import strings from '../../localization/en/strings';
 import colors from '../../helpers/colors';
 import scenes from '../../helpers/screens';
-import mobxStore from '../app/stores';
+import toDoStore from '../app/stores';
 
 @observer
 class List extends React.Component {
@@ -64,7 +64,7 @@ class List extends React.Component {
         style={footerContainer}
       >
         <Button
-          onClickAction={mobxStore.clearAllDone}
+          onClickAction={toDoStore.clearAllDone}
         >
           <Text
             style={clearButton}
@@ -80,18 +80,18 @@ class List extends React.Component {
     return (
       <View>
         <FlatList
-          data={mobxStore.items.slice()}
+          data={toDoStore.items.slice()}
           keyExtractor={item => item.id}
           renderItem={
             ({ item }) => (
               <ItemList
                 item={item}
-                handleToggle={mobxStore.handleToggle}
+                handleToggle={toDoStore.handleToggle}
               />
             )
           }
           ListFooterComponent={
-            this.renderFooter(mobxStore.clearAllDone)
+            this.renderFooter()
           }
         />
       </View>
