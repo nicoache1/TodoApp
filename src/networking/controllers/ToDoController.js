@@ -34,11 +34,10 @@ class ToDoController {
     }
   }
 
-  putToDo = async (toDo) => {
+  patchToDo = async (id) => {
     try {
-      const body = toDo;
+      const body = toDoStore.getToDoById(id);
       body.completed = !body.completed;
-      const id = Utils.getId(toDo.url);
       const response = await HttpService.patch(id, body);
       toDoStore.updateToDo(response.data);
     } catch (error) {

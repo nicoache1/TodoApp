@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, toJS } from 'mobx';
 import strings from '../../../localization/en/strings';
 import Utils from '../../../helpers/Utils';
 
@@ -14,6 +14,10 @@ class ObservableTodoStore {
 
   getToDosDone = () => {
     return this.items.filter(element => element.completed === true);
+  }
+
+  getToDoById = (id) => {
+    return toJS(this.items.find(element => element.id === id));
   }
 
   @action

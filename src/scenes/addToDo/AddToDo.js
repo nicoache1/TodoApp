@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react/native';
 import { View, Text, TextInput } from 'react-native';
 import styles from './AddToDo.styles';
@@ -89,7 +89,7 @@ class AddToDo extends React.Component {
       borderText,
     } = styles;
     return (
-      <Fragment>
+      <View>
         <View
           style={container}
         >
@@ -107,7 +107,7 @@ class AddToDo extends React.Component {
           style={borderBottom}
         />
         {this.renderError()}
-      </Fragment>
+      </View>
     );
   }
 }

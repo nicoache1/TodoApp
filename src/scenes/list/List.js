@@ -85,8 +85,14 @@ class List extends React.Component {
     const { startContainer, startText } = styles;
     if (toDoStore.start) {
       return (
-        <View style={startContainer}>
-          <Text style={startText}>{strings.titleApp}</Text>
+        <View
+          style={startContainer}
+        >
+          <Text
+            style={startText}
+          >
+            {strings.titleApp}
+          </Text>
         </View>
       );
     }
@@ -98,7 +104,7 @@ class List extends React.Component {
           ({ item }) => (
             <ItemList
               item={item}
-              handleToggle={ToDoController.putToDo}
+              handleToggle={ToDoController.patchToDo}
             />
           )
         }

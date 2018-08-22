@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { observer } from 'mobx-react';
-import mobx from 'mobx';
 import styles from './ItemList.styles';
 import Button from '../../../common/Button';
 import activeCheckbox from '../../../assets/icons/iconCheckboxActive.png';
@@ -37,7 +36,6 @@ const ItemList = observer((props) => {
     button,
   } = styles;
 
-  //TODO think a way to quit the arrow function.
   return (
     <View
       style={container}
@@ -57,7 +55,7 @@ const ItemList = observer((props) => {
         <Button
           completed={item.completed}
           id={item.id}
-          onClickAction={() => handleToggle(mobx.toJS(item))}
+          onClickAction={handleToggle}
         >
           {this.renderButton(item.completed, button)}
         </Button>
