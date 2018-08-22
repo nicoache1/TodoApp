@@ -4,6 +4,7 @@ import { View, Text, TextInput } from 'react-native';
 import styles from './AddToDo.styles';
 import colors from '../../helpers/colors';
 import toDoStore from '../app/stores';
+import ToDoController from '../../networking/controllers/ToDoController';
 
 @observer
 class AddToDo extends React.Component {
@@ -35,7 +36,6 @@ class AddToDo extends React.Component {
     super(props);
     this.state = {
       taskTitle: '',
-      taskDescription: '',
     };
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
   }
@@ -46,8 +46,8 @@ class AddToDo extends React.Component {
       event.type === 'NavBarButtonPress'
     ) {
       if (event.id === 'saveToDo') {
-        const result = toDoStore.addToDo(this.state.taskTitle, this.state.taskDescription);
-        if (result) {
+        if (toDoStore.validateToDo(this.state.taskTitle)) {
+          ToDoController.sendToDo({ title: this.state.taskTitle });
           navigator.pop({
             animated: true,
             animationType: 'fade',
@@ -55,10 +55,6 @@ class AddToDo extends React.Component {
         }
       }
     }
-  }
-
-  onChangeDescription = (text) => {
-    this.setState({ taskDescription: text });
   }
 
   onChangeText = (text) => {
@@ -89,7 +85,6 @@ class AddToDo extends React.Component {
     const {
       container,
       title,
-      description,
       borderBottom,
       borderText,
     } = styles;
@@ -106,14 +101,6 @@ class AddToDo extends React.Component {
           />
           <View
             style={borderText}
-          />
-          <TextInput
-            style={description}
-            placeholder="Task description"
-            multiline
-            numberOfLines={4}
-            value={this.state.taskDescription}
-            onChangeText={this.onChangeDescription}
           />
         </View>
         <View

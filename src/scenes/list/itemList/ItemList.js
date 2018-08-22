@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { observer } from 'mobx-react';
+import mobx from 'mobx';
 import styles from './ItemList.styles';
 import Button from '../../../common/Button';
 import activeCheckbox from '../../../assets/icons/iconCheckboxActive.png';
 import inactiveCheckbox from '../../../assets/icons/iconCheckboxInactive.png';
 
-this.renderButton = (done, button) => {
-  if (done) {
+this.renderButton = (completed, button) => {
+  if (completed) {
     return (
       <Image
         style={button}
@@ -25,24 +26,18 @@ this.renderButton = (done, button) => {
 
 const ItemList = observer((props) => {
   const {
-    item:
-    {
-      title,
-      description,
-      done,
-      id,
-    },
+    item,
     handleToggle,
   } = props;
   const {
     container,
     textTitle,
-    textDescription,
     text,
     checkBox,
     button,
   } = styles;
 
+  //TODO think a way to quit the arrow function.
   return (
     <View
       style={container}
@@ -53,23 +48,18 @@ const ItemList = observer((props) => {
         <Text
           style={textTitle}
         >
-          {title}
-        </Text>
-        <Text
-          style={textDescription}
-        >
-          {description}
+          {item.title}
         </Text>
       </View>
       <View
         style={checkBox}
       >
         <Button
-          done={done}
-          id={id}
-          onClickAction={handleToggle}
+          completed={item.completed}
+          id={item.id}
+          onClickAction={() => handleToggle(mobx.toJS(item))}
         >
-          {this.renderButton(done, button)}
+          {this.renderButton(item.completed, button)}
         </Button>
       </View>
     </View>

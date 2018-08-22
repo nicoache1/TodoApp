@@ -1,35 +1,44 @@
 import { observable, action } from 'mobx';
 import strings from '../../../localization/en/strings';
+import Utils from '../../../helpers/Utils';
 
 class ObservableTodoStore {
   @observable items = [];
   @observable error = '';
+  @observable start = true;
 
   @action
   clearAllDone = () => {
-    this.items = this.items.filter(element => element.done === false);
+    this.items = this.items.filter(element => element.completed === false);
+  }
+
+  getToDosDone = () => {
+    return this.items.filter(element => element.completed === true);
   }
 
   @action
-  addToDo = (newTitle, newDescription) => {
+  addToDo = (newToDo) => {
+    const id = { id: Utils.getId(newToDo.url) };
+    const toDoWithId = { ...newToDo, ...id };
+    this.items.push(toDoWithId);
+  }
+
+  @action
+  validateToDo = (title) => {
     const { emptyTextOrDescription } = strings;
-    if (newTitle.length !== 0 && newDescription.length !== 0) {
-      const newToDo = {
-        id: `${newTitle}${newDescription}`,
-        title: newTitle,
-        completed: false,
-      };
-      this.items.push(newToDo);
-      this.error = '';
-    } else {
+    this.error = '';
+    if (title.length === 0) {
       this.error = emptyTextOrDescription;
     }
-    return newTitle.length !== 0 && newDescription.length !== 0;
+    return title.length !== 0;
   }
 
   @action
   addItems = (newItems) => {
-    this.items = newItems;
+    newItems.forEach((toDo) => {
+      this.addToDo(toDo);
+    });
+    this.start = false;
   }
 
   @action
@@ -40,14 +49,13 @@ class ObservableTodoStore {
 
   @action
   removeToDo = (toDo) => {
-    const index = this.items.find(toDo);
+    const index = this.items.findIndex(toDoItem => toDoItem.url === toDo.url);
     this.items.splice(index, 1);
   }
 
   @action
   updateToDo = (toDo) => {
-    this.removeToDo(toDo);
-    this.addToDo(toDo);
+    this.handleToggle(Utils.getId(toDo.url));
   }
 }
 

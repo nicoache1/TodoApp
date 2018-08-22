@@ -9,7 +9,7 @@ import strings from '../../localization/en/strings';
 import colors from '../../helpers/colors';
 import scenes from '../../helpers/screens';
 import toDoStore from '../app/stores';
-import toDoController from '../../networking/controllers/ToDoController';
+import ToDoController from '../../networking/controllers/ToDoController';
 
 @observer
 class List extends React.Component {
@@ -37,7 +37,7 @@ class List extends React.Component {
   }
 
   componentDidMount() {
-    toDoController.getToDo();
+    ToDoController.getToDo();
   }
 
   onNavigatorEvent = (event) => {
@@ -48,7 +48,7 @@ class List extends React.Component {
           screen: scenes.ADD_TODO_SCREEN,
           animated: true,
           animationType: 'fade',
-          title: 'Todo',
+          title: strings.titleApp,
           passProps: { addToDo: this.addToDo },
           backButtonTitle: 'Cancel',
         });
@@ -69,7 +69,7 @@ class List extends React.Component {
         style={footerContainer}
       >
         <Button
-          onClickAction={toDoStore.clearAllDone}
+          onClickAction={ToDoController.clearAllDone}
         >
           <Text
             style={clearButton}
@@ -81,24 +81,38 @@ class List extends React.Component {
     );
   }
 
+  renderScreen = () => {
+    const { startContainer, startText } = styles;
+    if (toDoStore.start) {
+      return (
+        <View style={startContainer}>
+          <Text style={startText}>{strings.titleApp}</Text>
+        </View>
+      );
+    }
+    return (
+      <FlatList
+        data={toDoStore.items.slice()}
+        keyExtractor={item => item.id}
+        renderItem={
+          ({ item }) => (
+            <ItemList
+              item={item}
+              handleToggle={ToDoController.putToDo}
+            />
+          )
+        }
+        ListFooterComponent={
+          this.renderFooter()
+        }
+      />
+    );
+  }
+
   render() {
     return (
       <View>
-        <FlatList
-          data={toDoStore.items.slice()}
-          keyExtractor={item => item.id}
-          renderItem={
-            ({ item }) => (
-              <ItemList
-                item={item}
-                handleToggle={toDoStore.handleToggle}
-              />
-            )
-          }
-          ListFooterComponent={
-            this.renderFooter()
-          }
-        />
+        {this.renderScreen()}
       </View>
     );
   }
