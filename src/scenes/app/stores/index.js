@@ -1,4 +1,4 @@
-import { observable, action, toJS } from 'mobx';
+import { observable, action, toJS, computed } from 'mobx';
 import ToDoController from '../../../networking/controllers/ToDoController';
 import strings from '../../../localization/en/strings';
 import Utils from '../../../helpers/Utils';
@@ -7,14 +7,15 @@ class ObservableTodoStore {
   @observable items = [];
   @observable error = null;
 
-  @action handleError = () => {
+  @action
+  handleError = () => {
     const { generalError } = strings;
     this.error = generalError;
   }
 
   @action
   clearAllDone = () => {
-    const itemsToRemove = this.getToDosDone();
+    const itemsToRemove = this.getToDosDone.get();
     itemsToRemove.forEach(async (toDoDone) => {
       try {
         const response = await ToDoController.deleteToDo(toDoDone.id);
@@ -25,9 +26,9 @@ class ObservableTodoStore {
     });
   }
 
-  getToDosDone = () => {
+  getToDosDone = computed(() => {
     return this.items.filter(element => element.completed === true);
-  }
+  })
 
   @action
   addToDo = (newToDo) => {
