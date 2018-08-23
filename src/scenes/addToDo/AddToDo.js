@@ -4,7 +4,6 @@ import { View, Text, TextInput } from 'react-native';
 import styles from './AddToDo.styles';
 import colors from '../../helpers/colors';
 import toDoStore from '../app/stores';
-import ToDoController from '../../networking/controllers/ToDoController';
 
 @observer
 class AddToDo extends React.Component {
@@ -47,7 +46,7 @@ class AddToDo extends React.Component {
     ) {
       if (event.id === 'saveToDo') {
         if (toDoStore.validateToDo(this.state.taskTitle)) {
-          ToDoController.sendToDo({ title: this.state.taskTitle });
+          toDoStore.sendToDo({ title: this.state.taskTitle });
           navigator.pop({
             animated: true,
             animationType: 'fade',
@@ -66,7 +65,7 @@ class AddToDo extends React.Component {
       errorStyle,
       errorContainer,
     } = styles;
-    if (toDoStore.error.length !== 0) {
+    if (toDoStore.error) {
       return (
         <View
           style={errorContainer}

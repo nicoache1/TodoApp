@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, FlatList, Text } from 'react-native';
 import { observer } from 'mobx-react/native';
+import { toJS } from 'mobx';
 import ItemList from './itemList/ItemList';
 import addIcon from '../../assets/icons/add.png';
 import Button from '../../common/Button';
@@ -9,7 +10,6 @@ import strings from '../../localization/en/strings';
 import colors from '../../helpers/colors';
 import scenes from '../../helpers/screens';
 import toDoStore from '../app/stores';
-import ToDoController from '../../networking/controllers/ToDoController';
 
 @observer
 class List extends React.Component {
@@ -37,7 +37,7 @@ class List extends React.Component {
   }
 
   componentDidMount() {
-    ToDoController.getToDo();
+    toDoStore.getItems();
   }
 
   onNavigatorEvent = (event) => {
@@ -69,7 +69,7 @@ class List extends React.Component {
         style={footerContainer}
       >
         <Button
-          onClickAction={ToDoController.clearAllDone}
+          onClickAction={toDoStore.clearAllDone}
         >
           <Text
             style={clearButton}
@@ -81,44 +81,24 @@ class List extends React.Component {
     );
   }
 
-  renderScreen = () => {
-    const { startContainer, startText } = styles;
-    if (toDoStore.start) {
-      return (
-        <View
-          style={startContainer}
-        >
-          <Text
-            style={startText}
-          >
-            {strings.titleApp}
-          </Text>
-        </View>
-      );
-    }
-    return (
-      <FlatList
-        data={toDoStore.items.slice()}
-        keyExtractor={item => item.id}
-        renderItem={
-          ({ item }) => (
-            <ItemList
-              item={item}
-              handleToggle={ToDoController.patchToDo}
-            />
-          )
-        }
-        ListFooterComponent={
-          this.renderFooter()
-        }
-      />
-    );
-  }
-
   render() {
     return (
       <View>
-        {this.renderScreen()}
+        <FlatList
+          data={toJS(toDoStore.items)}
+          keyExtractor={item => item.id}
+          renderItem={
+            ({ item }) => (
+              <ItemList
+                item={item}
+                handleToggle={toDoStore.handleToggle}
+              />
+            )
+          }
+          ListFooterComponent={
+            this.renderFooter()
+          }
+        />
       </View>
     );
   }
