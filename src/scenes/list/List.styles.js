@@ -44,6 +44,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: colors.pink,
   },
+  startContainer: {
+    flex: 1,
+    backgroundColor: colors.blue,
+  },
+  startText: {
+    color: 'white',
+  },
 });
 
 export default styles;

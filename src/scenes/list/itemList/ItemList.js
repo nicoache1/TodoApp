@@ -6,8 +6,8 @@ import Button from '../../../common/Button';
 import activeCheckbox from '../../../assets/icons/iconCheckboxActive.png';
 import inactiveCheckbox from '../../../assets/icons/iconCheckboxInactive.png';
 
-this.renderButton = (done, button) => {
-  if (done) {
+this.renderButton = (completed, button) => {
+  if (completed) {
     return (
       <Image
         style={button}
@@ -25,19 +25,12 @@ this.renderButton = (done, button) => {
 
 const ItemList = observer((props) => {
   const {
-    item:
-    {
-      title,
-      description,
-      done,
-      id,
-    },
+    item,
     handleToggle,
   } = props;
   const {
     container,
     textTitle,
-    textDescription,
     text,
     checkBox,
     button,
@@ -53,23 +46,18 @@ const ItemList = observer((props) => {
         <Text
           style={textTitle}
         >
-          {title}
-        </Text>
-        <Text
-          style={textDescription}
-        >
-          {description}
+          {item.title}
         </Text>
       </View>
       <View
         style={checkBox}
       >
         <Button
-          done={done}
-          id={id}
+          completed={item.completed}
+          id={item.id}
           onClickAction={handleToggle}
         >
-          {this.renderButton(done, button)}
+          {this.renderButton(item.completed, button)}
         </Button>
       </View>
     </View>

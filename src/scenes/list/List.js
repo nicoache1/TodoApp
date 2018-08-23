@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, FlatList, Text } from 'react-native';
 import { observer } from 'mobx-react/native';
+import { toJS } from 'mobx';
 import ItemList from './itemList/ItemList';
 import addIcon from '../../assets/icons/add.png';
 import Button from '../../common/Button';
@@ -35,6 +36,10 @@ class List extends React.Component {
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
   }
 
+  componentDidMount() {
+    toDoStore.getItems();
+  }
+
   onNavigatorEvent = (event) => {
     const { navigator } = this.props;
     if (event.type === 'NavBarButtonPress') {
@@ -43,7 +48,7 @@ class List extends React.Component {
           screen: scenes.ADD_TODO_SCREEN,
           animated: true,
           animationType: 'fade',
-          title: 'Todo',
+          title: strings.titleApp,
           passProps: { addToDo: this.addToDo },
           backButtonTitle: 'Cancel',
         });
@@ -80,7 +85,7 @@ class List extends React.Component {
     return (
       <View>
         <FlatList
-          data={toDoStore.items.slice()}
+          data={toJS(toDoStore.items)}
           keyExtractor={item => item.id}
           renderItem={
             ({ item }) => (
