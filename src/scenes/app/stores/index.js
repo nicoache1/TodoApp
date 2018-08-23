@@ -7,16 +7,20 @@ class ObservableTodoStore {
   @observable items = [];
   @observable error = null;
 
+  @action handleError = () => {
+    const { generalError } = strings;
+    this.error = generalError;
+  }
+
   @action
   clearAllDone = () => {
-    const { generalError } = strings;
     const itemsToRemove = this.getToDosDone();
     itemsToRemove.forEach(async (toDoDone) => {
       try {
         const response = await ToDoController.deleteToDo(toDoDone.id);
         this.removeToDo(response.data);
       } catch (error) {
-        this.error = generalError;
+        this.handleError();
       }
     });
   }
@@ -44,18 +48,16 @@ class ObservableTodoStore {
 
   @action
   sendToDo = async (toDoTitle) => {
-    const { generalError } = strings;
     try {
       const response = await ToDoController.sendToDo(toDoTitle);
       this.addToDo(response.data);
     } catch (error) {
-      this.error = generalError;
+      this.handleError();
     }
   }
 
   @action
   getItems = async () => {
-    const { generalError } = strings;
     try {
       const response = await ToDoController.getToDo();
       const newItems = response.data;
@@ -63,19 +65,18 @@ class ObservableTodoStore {
         this.addToDo(toDo);
       });
     } catch (error) {
-      this.error = generalError;
+      this.handleError();
     }
   }
 
   @action
   handleToggle = async (id) => {
-    const { generalError } = strings;
     try {
       const toDo = toJS(this.items.find(element => element.id === id));
       const response = await ToDoController.patchToDo(id, toDo);
       this.toggleElement(response.data);
     } catch (error) {
-      this.error = generalError;
+      this.handleError();
     }
   }
 
