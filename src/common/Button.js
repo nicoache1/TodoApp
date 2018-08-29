@@ -5,7 +5,7 @@ import styles from './Button.styles';
 const Button = (props) => {
   const {
     onClickAction,
-    id,
+    item,
     children,
   } = props;
   const {
@@ -17,7 +17,7 @@ const Button = (props) => {
       style={container}
     >
       <TouchableOpacity
-        onPress={() => onClickAction(id)}
+        onPress={() => onClickAction(item)}
       >
         {children}
       </TouchableOpacity>

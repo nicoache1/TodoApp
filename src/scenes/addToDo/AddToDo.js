@@ -1,11 +1,10 @@
 import React from 'react';
-import { observer } from 'mobx-react/native';
 import { View, Text, TextInput } from 'react-native';
+import { connect } from 'react-redux';
 import styles from './AddToDo.styles';
 import colors from '../../helpers/colors';
-import toDoStore from '../app/stores';
+import { addTodo } from '../app/reducers/actions';
 
-@observer
 class AddToDo extends React.Component {
   static navigatorStyle = {
     navBarBackgroundColor: colors.blue,
@@ -45,13 +44,11 @@ class AddToDo extends React.Component {
       event.type === 'NavBarButtonPress'
     ) {
       if (event.id === 'saveToDo') {
-        if (toDoStore.validateToDo(this.state.taskTitle)) {
-          toDoStore.sendToDo({ title: this.state.taskTitle });
-          navigator.pop({
-            animated: true,
-            animationType: 'fade',
-          });
-        }
+        this.props.addTodoItem({ title: this.state.taskTitle });
+        navigator.pop({
+          animated: true,
+          animationType: 'fade',
+        });
       }
     }
   }
@@ -65,7 +62,10 @@ class AddToDo extends React.Component {
       errorStyle,
       errorContainer,
     } = styles;
-    if (toDoStore.error) {
+    const {
+      error,
+    } = this.props;
+    if (error) {
       return (
         <View
           style={errorContainer}
@@ -73,7 +73,7 @@ class AddToDo extends React.Component {
           <Text
             style={errorStyle}
           >
-            {toDoStore.error}
+            {error}
           </Text>
         </View>);
     }
@@ -111,4 +111,16 @@ class AddToDo extends React.Component {
   }
 }
 
-export default AddToDo;
+const mapStateToProps = state => ({
+  error: state.error,
+});
+
+const mapDispatchToProps = dispatch => ({
+  addTodoItem: todo => dispatch(addTodo(todo)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddToDo);
+

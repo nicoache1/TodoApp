@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
-import { observer } from 'mobx-react';
 import styles from './ItemList.styles';
 import Button from '../../../common/Button';
 import activeCheckbox from '../../../assets/icons/iconCheckboxActive.png';
@@ -23,10 +22,10 @@ this.renderButton = (completed, button) => {
   );
 };
 
-const ItemList = observer((props) => {
+const ItemList = (props) => {
   const {
     item,
-    handleToggle,
+    handleToggleItem,
   } = props;
   const {
     container,
@@ -54,14 +53,14 @@ const ItemList = observer((props) => {
       >
         <Button
           completed={item.completed}
-          id={item.id}
-          onClickAction={handleToggle}
+          item={item}
+          onClickAction={handleToggleItem}
         >
           {this.renderButton(item.completed, button)}
         </Button>
       </View>
     </View>
   );
-});
+};
 
 export default ItemList;
