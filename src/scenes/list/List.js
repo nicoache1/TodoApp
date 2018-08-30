@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, FlatList, Text } from 'react-native';
-import { observer } from 'mobx-react/native';
-import { toJS } from 'mobx';
+import { connect } from 'react-redux';
 import ItemList from './itemList/ItemList';
 import addIcon from '../../assets/icons/add.png';
 import Button from '../../common/Button';
@@ -9,9 +8,8 @@ import styles from './List.styles';
 import strings from '../../localization/en/strings';
 import colors from '../../helpers/colors';
 import scenes from '../../helpers/screens';
-import toDoStore from '../app/stores';
+import { getTodo, toggleTodo, clearAllDone } from '../app/reducers/actions';
 
-@observer
 class List extends React.Component {
   static navigatorStyle = {
     navBarBackgroundColor: colors.blue,
@@ -37,7 +35,7 @@ class List extends React.Component {
   }
 
   componentDidMount() {
-    toDoStore.getItems();
+    this.props.getTodoItems();
   }
 
   onNavigatorEvent = (event) => {
@@ -64,12 +62,17 @@ class List extends React.Component {
     const {
       clearAll,
     } = strings;
+    const {
+      clearAllTodoDone,
+      toDos,
+    } = this.props;
+    const toDosDone = toDos.filter(toDo => toDo.completed === true);
     return (
       <View
         style={footerContainer}
       >
         <Button
-          onClickAction={toDoStore.clearAllDone}
+          onClickAction={() => clearAllTodoDone(toDosDone)}
         >
           <Text
             style={clearButton}
@@ -82,16 +85,17 @@ class List extends React.Component {
   }
 
   render() {
+    const { toDos, handleToggleItem } = this.props;
     return (
       <View>
         <FlatList
-          data={toJS(toDoStore.items)}
-          keyExtractor={item => item.id}
+          data={toDos}
+          keyExtractor={item => item.url}
           renderItem={
             ({ item }) => (
               <ItemList
                 item={item}
-                handleToggle={toDoStore.handleToggle}
+                handleToggleItem={handleToggleItem}
               />
             )
           }
@@ -104,4 +108,21 @@ class List extends React.Component {
   }
 }
 
-export default List;
+const mapStateToProps = (state) => {
+  return {
+    toDos: state.toDos,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getTodoItems: () => dispatch(getTodo()),
+    handleToggleItem: (id, item) => dispatch(toggleTodo(id, item)),
+    clearAllTodoDone: toDos => dispatch(clearAllDone(toDos)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(List);
