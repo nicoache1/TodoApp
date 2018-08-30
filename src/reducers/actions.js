@@ -1,7 +1,7 @@
 import actionTypes from './actionTypes';
-import ToDoController from '../../../networking/controllers/ToDoController';
-import strings from '../../../localization/en/strings';
-import { deserializeItems, deserializeItem } from '../../../helpers/serializer';
+import ToDoController from '../networking/controllers/ToDoController';
+import strings from '../localization/en/strings';
+import { deserializeItems, deserializeItem } from '../helpers/deserializer';
 
 export const getTodo = () => {
   return async (dispatch) => {
@@ -10,7 +10,7 @@ export const getTodo = () => {
       const response = await ToDoController.getToDo();
       dispatch(successGetTodo(deserializeItems(response.data)));
     } catch (error) {
-      dispatch(failureGetToDo(strings.generalError));
+      dispatch(failureGetToDo(strings.apiError));
     }
   };
 };
@@ -22,7 +22,7 @@ export const addTodo = (todo) => {
       const response = await ToDoController.sendToDo(todo);
       dispatch(successAddTodo(deserializeItem(response.data)));
     } catch (error) {
-      dispatch(failureAddToDo(strings.generalError));
+      dispatch(failureAddToDo(strings.apiError));
     }
   };
 };
@@ -35,7 +35,7 @@ export const toggleTodo = (item) => {
       const response = await ToDoController.patchToDo(item.id, body);
       dispatch(successUpdateTodo(deserializeItem(response.data)));
     } catch (error) {
-      dispatch(failureUpdateToDo(strings.generalError));
+      dispatch(failureUpdateToDo(strings.apiError));
     }
   };
 };
@@ -47,7 +47,7 @@ export const clearAllDone = (items) => {
         const response = await ToDoController.deleteToDo(todo.id);
         dispatch(successDeleteTodo(deserializeItem(response.data)));
       } catch (error) {
-        dispatch(failureDeleteToDo(strings.generalError));
+        dispatch(failureDeleteToDo(strings.apiError));
       }
     });
   };

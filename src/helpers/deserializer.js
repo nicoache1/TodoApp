@@ -5,7 +5,12 @@ export const deserializeItems = (todos) => {
 };
 
 export const deserializeItem = (todo) => {
-  return { ...todo, id: getIdByUrl(todo.url) };
+  return {
+    completed: todo.completed,
+    id: getIdByUrl(todo.url),
+    url: todo.url,
+    title: todo.title,
+  };
 };
 
 const getIdByUrl = (url) => {
